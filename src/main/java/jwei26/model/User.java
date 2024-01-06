@@ -1,15 +1,39 @@
 package jwei26.model;
 
-import java.sql.Timestamp;
+import java.util.Set;
 
+import java.sql.Timestamp;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "registration_date")
     private Timestamp registrationDate;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Post> posts;
+
     public User() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        registrationDate = new Timestamp(System.currentTimeMillis());
     }
 
     public Long getUserId() {
@@ -52,4 +76,6 @@ public class User {
         this.registrationDate = registrationDate;
     }
 }
+
+
 

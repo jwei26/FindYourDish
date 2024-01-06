@@ -1,15 +1,46 @@
 package jwei26.model;
 
 import java.sql.Timestamp;
-
+import javax.persistence.*;
+import java.util.Set;
+@Entity
+@Table(name = "posts")
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long postId;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "post_date")
     private Timestamp postDate;
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PostIngredient> postIngredients;
 
     public Post() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        postDate = new Timestamp(System.currentTimeMillis());
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getPostId() {
@@ -44,12 +75,6 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }
+
 
