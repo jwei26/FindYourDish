@@ -1,6 +1,7 @@
 package jwei26.repository;
 
 import jwei26.model.Ingredient;
+import jwei26.model.Post;
 import jwei26.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class IngredientDao implements IIngredientDao {
@@ -85,6 +88,20 @@ public class IngredientDao implements IIngredientDao {
                 transaction.rollback();
             }
             logger.error("Error to delete ingredient with id {}", ingredientId, exception);
+            throw exception;
+        }
+    }
+
+    @Override
+    public Set<Post> getPostsByIngredient(Long ingredientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Ingredient ingredient = session.get(Ingredient.class, ingredientId);
+            if (ingredient != null) {
+                return ingredient.getPosts();
+            }
+            return new HashSet<>();
+        } catch (HibernateException exception) {
+            logger.error("Error when getting posts for ingredient", exception);
             throw exception;
         }
     }

@@ -1,5 +1,7 @@
 package jwei26.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -17,8 +19,9 @@ public class Ingredient {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PostIngredient> postIngredients;
+    @ManyToMany(mappedBy = "ingredients")
+    @JsonIgnore
+    private Set<Post> posts;
 
     public Ingredient() {
     }
@@ -45,6 +48,10 @@ public class Ingredient {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
     }
 }
 

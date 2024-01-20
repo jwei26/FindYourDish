@@ -1,5 +1,8 @@
 package jwei26.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.Criteria;
+
 import java.sql.Timestamp;
 import javax.persistence.*;
 import java.util.Set;
@@ -24,8 +27,14 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PostIngredient> postIngredients;
+    @ManyToMany
+    @JoinTable(
+            name = "post_ingredients",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    @JsonIgnore
+    private Set<Ingredient> ingredients;
 
     public Post() {
     }
@@ -75,6 +84,9 @@ public class Post {
         this.postDate = postDate;
     }
 
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
 }
 
 

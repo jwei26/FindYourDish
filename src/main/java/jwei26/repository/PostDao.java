@@ -1,5 +1,6 @@
 package jwei26.repository;
 
+import jwei26.model.Ingredient;
 import jwei26.model.Post;
 import jwei26.util.HibernateUtil;
 import org.hibernate.HibernateException;
@@ -88,5 +89,7 @@ public class PostDao implements IPostDao {
             throw exception;
         }
     }
+
+
 }
 
