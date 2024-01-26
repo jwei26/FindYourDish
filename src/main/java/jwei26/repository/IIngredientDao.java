@@ -12,6 +12,6 @@ public interface IIngredientDao {
     List<Ingredient> getAllIngredients();
     void updateIngredient(Ingredient ingredient);
     void deleteIngredient(Long ingredientId);
-    Set<Post> getPostsByIngredient(Long ingredientId);
+    Ingredient getIngredientByName(String ingredientName);
 }
 

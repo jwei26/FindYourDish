@@ -2,6 +2,7 @@ package jwei26.repository;
 
 import jwei26.model.Ingredient;
 import jwei26.model.Post;
+import jwei26.model.User;
 import jwei26.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -93,17 +94,17 @@ public class IngredientDao implements IIngredientDao {
     }
 
     @Override
-    public Set<Post> getPostsByIngredient(Long ingredientId) {
+    public Ingredient getIngredientByName(String ingredientName) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Ingredient ingredient = session.get(Ingredient.class, ingredientId);
-            if (ingredient != null) {
-                return ingredient.getPosts();
-            }
-            return new HashSet<>();
+            String hql = "FROM Ingredient WHERE name = :ingredientName";
+            Query<Ingredient> query = session.createQuery(hql, Ingredient.class);
+            query.setParameter("ingredientName", ingredientName);
+            return query.uniqueResult();
         } catch (HibernateException exception) {
-            logger.error("Error when getting posts for ingredient", exception);
+            logger.error("Error when getting ingredient by ingredientName {}", ingredientName, exception);
             throw exception;
         }
     }
+
 }
 
