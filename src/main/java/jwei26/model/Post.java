@@ -27,6 +27,9 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private Set<Image> images;
+
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "post_ingredients",
@@ -86,6 +89,14 @@ public class Post {
 
     public Set<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 }
 

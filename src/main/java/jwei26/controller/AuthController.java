@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-@CrossOrigin(origins = "http://localhost:5177")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthController {

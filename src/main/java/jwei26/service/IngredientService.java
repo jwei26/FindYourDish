@@ -15,6 +15,14 @@ public class IngredientService {
     @Autowired
     PostService postService;
     public void handleIngredients(Post post, List<String> ingredientNames) {
+        long uniqueCount = ingredientNames.stream()
+                .map(String::toLowerCase)
+                .distinct()
+                .count();
+        if (uniqueCount != ingredientNames.size()) {
+            postService.deletePost(post.getPostId(), post.getUser());
+            throw new IllegalArgumentException("Ingredients must be unique");
+        }
         for (String name : ingredientNames) {
             name = name.toLowerCase();
             Ingredient ingredient = ingredientDao.getIngredientByName(name);
@@ -26,4 +34,5 @@ public class IngredientService {
             postService.addIngredientToPost(post.getPostId(), ingredient.getIngredientId());
         }
     }
+
 }

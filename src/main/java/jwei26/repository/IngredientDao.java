@@ -106,5 +106,18 @@ public class IngredientDao implements IIngredientDao {
         }
     }
 
+    @Override
+    public List<Ingredient> getIngredientsByPostId(Long postId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT i FROM Ingredient i JOIN i.posts p WHERE p.id = :postId";
+            Query<Ingredient> query = session.createQuery(hql, Ingredient.class);
+            query.setParameter("postId", postId);
+            return query.list();
+        } catch (HibernateException exception) {
+            logger.error("Error when getting ingredient by post Id {}", postId, exception);
+            throw exception;
+        }
+    }
+
 }
 
